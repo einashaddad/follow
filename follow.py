@@ -4,7 +4,6 @@
 import requests
 import pyquery as pq
 import os
-import pdb
 import sys
 
 def scrape_hs(hs_email, hs_password, host):
@@ -75,22 +74,25 @@ def follow_users(gh_username, gh_password, people_to_follow):
     s.auth = gh_username, gh_password
 
     for user_to_follow in people_to_follow.values():
-        is_following = s.get(url+user_to_follow)
-        if is_following.status_code != 204: #if not following user
 
-            r = s.put(url+user_to_follow)
+        if user_to_follow != '/'+gh_username: # we do not want to follow ourselves
 
-            if r.status_code == 204:
-                print "Followed %s" % (user_to_follow)
-            elif r.status_code == 401:
-                print "Incorrect GitHub username and/or password"
-                sys.exit()
-            else:
-                print "Response for %s" % (user_to_follow)
-                print r.content
-        
-        else: 
-            print "Already following: %s" % (user_to_follow)
+            is_following = s.get(url+user_to_follow)
+            if is_following.status_code != 204: #if not following user
+
+                r = s.put(url+user_to_follow)
+
+                if r.status_code == 204:
+                    print "Followed %s" % (user_to_follow)
+                elif r.status_code == 401:
+                    print "Incorrect GitHub username and/or password"
+                    sys.exit()
+                else:
+                    print "Response for %s" % (user_to_follow)
+                    print r.content
+            
+            else: 
+                print "Already following: %s" % (user_to_follow)
 
 if __name__ == '__main__':
     host = 'https://www.hackerschool.com'
