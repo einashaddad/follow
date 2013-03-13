@@ -43,6 +43,9 @@ def extract_githubs(resp):
 	content = resp.text
 	content = pq.PyQuery(content)
 	people = content('#batch7 .person')
+	if not people:
+		print "Incorrect hacker-school username and/or password"
+		sys.exit()
 	
 	people_to_follow = {}
 
@@ -58,7 +61,9 @@ def extract_githubs(resp):
 		if 'github' in first_link:
 			just_user = first_link[17:] 
 			people_to_follow[person_endpoint] = just_user
+	
 	return people_to_follow
+
 
 def follow_users(gh_username, gh_password, people_to_follow):
 	"""
@@ -70,17 +75,22 @@ def follow_users(gh_username, gh_password, people_to_follow):
 	s.auth = gh_username, gh_password
 
 	for user_to_follow in people_to_follow.values():
-
-		if s.get(url+user_to_follow).status_code != 204:	#if not following user
+		is_following = s.get(url+user_to_follow)
+		if is_following.status_code != 204:	#if not following user
 
 			r = s.put(url+user_to_follow)
 
 			if r.status_code == 204:
 				print "Followed %s" % (user_to_follow)
+			elif r.status_code == 401:
+				print "Incorrect GitHub username and/or password"
+				sys.exit()
 			else:
 				print "Response for %s" % (user_to_follow)
 				print r.content
-		else: print "Already following: %s" % (user_to_follow)
+		
+		else: 
+			print "Already following: %s" % (user_to_follow)
 
 if __name__ == '__main__':
 	host = 'https://www.hackerschool.com'
