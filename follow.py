@@ -3,8 +3,8 @@
 
 import requests
 import pyquery as pq
-import os
 import sys
+import getpass
 
 def scrape_hs(hs_email, hs_password, host):
     """
@@ -96,15 +96,11 @@ def follow_users(gh_username, gh_password, people_to_follow):
 
 if __name__ == '__main__':
     host = 'https://www.hackerschool.com'
-    # set the usernames and passwords as environment variables
-    try:
-        hs_email = os.environ['hs_email']
-        hs_password = os.environ['hs_password']
-        gh_username = os.environ["gh_username"]
-        gh_password = os.environ["gh_password"]
-    except KeyError:
-        print "Create hs_email, hs_password, gh_username, gh_password as environment variables"
-        sys.exit()
+
+    hs_email =  raw_input("Hackser-School username:")
+    hs_password = getpass.getpass(prompt='Hacker-School password:')
+    gh_username = raw_input("GitHub username:")
+    gh_password = getpass.getpass(prompt='GitHub password:')
 
     response = scrape_hs(hs_email, hs_password, host)
     people_to_follow = extract_githubs(response)
