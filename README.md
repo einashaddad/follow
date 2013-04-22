@@ -1,7 +1,7 @@
 follow
 ======
 
-Follow all hacker-schoolers in current batch (batch7) on GitHub
+A script that scrapes the Hacker School website for student's GitHub handles, then makes API calls to follow Hacker Schoolers in your batch on GitHub.
 
 To run :
 
