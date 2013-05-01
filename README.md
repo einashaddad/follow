@@ -7,3 +7,6 @@ To run :
 
     python follow.py
 
+
+**NOTE:**
+Scraping of the Hacker School website was necessary in order to retrieve all the GitHub handles. The Hacker School API would not suffice because that returns credentials of the specific person logged in and not all students.
